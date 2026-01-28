@@ -20,6 +20,20 @@ export default function VotingApp() {
   const [votedParty, setVotedParty] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /* -------------------- Helper functions -------------------- */
+  function getDeviceId() {
+    let id = localStorage.getItem("device_id");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("device_id", id);
+      window.name = id;              // survives reloads
+      indexedDB.open("vote-db").onupgradeneeded = e => {
+        e.target.result.createObjectStore("meta");
+      };
+    }
+    return id;
+  }
+
 
   /* -------------------- API HELPERS -------------------- */
 
@@ -46,7 +60,7 @@ export default function VotingApp() {
           body: JSON.stringify({
             pollId: POLL_ID,
             userHash: "abcd123",
-            deviceId: "dd124"
+            deviceId: getDeviceId()
           })
         });
       } catch (e) {
@@ -107,7 +121,7 @@ export default function VotingApp() {
          {/* HEADER */}
          <div className="card-header">
            <Vote size={36} />
-           <h1>West Bengal Public Poll – 2026</h1>
+           <h1>West Bengal Public Mandate – 2026</h1>
            <p>One vote per person · Anonymous</p>
          </div>
  
