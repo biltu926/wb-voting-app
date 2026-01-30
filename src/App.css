@@ -1,15 +1,16 @@
 /* ===== RESET ===== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body, #root {
-  margin: 0;
-  padding: 0;
   width: 100%;
-  height: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f1f5f9;
+  min-height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #edf2fb 0%, #ccdbfd 100%);
+  
 }
 
 /* ===== APP LAYOUT ===== */
@@ -17,171 +18,411 @@ html, body, #root {
   min-height: 100vh;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ===== MAIN CARD ===== */
+.voting-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== HEADER ===== */
+
+.down-icon {
+  width: 40px;
+  height: auto;
+  margin-left: 8px;
+  margin-top: 5px;
+  vertical-align: middle;
+}
+
+/* visually hidden for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .card-header {
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 20px;
+  padding: 40px 30px;
+  text-align: center;
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.card-header svg {
+  display: block;
+  margin: 0 auto 16px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
 }
 
-.header-title {
-  font-size: 1.4rem;
-  margin: 0;
+.card-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header-subtitle {
-  margin: 4px 0 0;
-  opacity: 0.9;
+.card-header p {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  font-weight: 500;
 }
 
-/* ===== MAIN CONTENT ===== */
-.voting-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: white;
-}
-
+/* ===== CONTENT AREA ===== */
 .card-content {
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 40px 30px;
 }
 
-/* ===== EMAIL ===== */
-.email-section {
-  max-width: 500px;
-  margin-bottom: 20px;
-}
-
-.email-label {
+/* ===== LOADING ===== */
+.loading {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.25rem;
   font-weight: 600;
+  color: white;
 }
 
-.email-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #cbd5f5;
-}
-
+/* ===== ERROR MESSAGE ===== */
 .error-message {
+  background: #fee2e2;
   color: #dc2626;
-  margin-top: 6px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid #fecaca;
 }
 
 /* ===== BUTTON GRID ===== */
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 16px;
-  max-width: 600px;
+  margin-bottom: 40px;
 }
 
+.card-content {
+  padding: 40px 30px;
+}
+
+/* center grid and constrain width so buttons don't stick to header */
+.card-content .button-grid {
+  max-width: 760px;
+  margin: 0 auto 40px;
+  justify-items: center;
+}
+
+
+
 .vote-button {
-  padding: 16px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 10px;
+  padding: 20px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
   border: none;
   color: white;
   cursor: pointer;
-  transition: transform 0.1s ease, opacity 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vote-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .vote-button:hover {
-  transform: translateY(-2px);
-  opacity: 0.95;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
-.vote-button.tmc { background: #16a34a; }
-.vote-button.bjp { background: #ea580c; }
-.vote-button.cpim { background: #dc2626; }
-.vote-button.others { background: #64748b; }
+.vote-button:hover::before {
+  opacity: 1;
+}
+
+.vote-button:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.vote-button.tmc { 
+  background: linear-gradient(135deg, #4c956c, #2c6e49);
+}
+.vote-button.bjp { 
+  background: linear-gradient(135deg, #d77a61, #ff8c61);
+}
+.vote-button.cpim { 
+  background: linear-gradient(135deg, #c75146, #81171b);
+}
+.vote-button.others { 
+  background: linear-gradient(135deg, #64748b, #475569);
+}
 
 /* ===== VOTED STATE ===== */
 .voted-banner {
   display: flex;
-  gap: 14px;
+  flex-direction: column;
   align-items: center;
-  background: #e0f2fe;
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 24px;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  padding: 32px 24px;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  text-align: center;
+  border: 2px solid #93c5fd;
 }
 
-.voted-text {
+.voted-banner svg {
+  color: #2563eb;
+}
+
+.voted-banner p {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1e40af;
+  margin: 0;
+}
+
+.voted-banner strong {
+  font-size: 1.3rem;
+  color: #1e3a8a;
+  margin-top: 4px;
+}
+
+/* ===== RESULTS SECTION ===== */
+.results {
+  background: #f8fafc;
+  padding: 32px 28px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.results h2 {
+  font-size: 1.5rem;
   font-weight: 700;
-}
-
-.voted-party {
-  margin: 4px 0;
-}
-
-/* ===== RESULTS ===== */
-.results-title {
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  color: #1e293b;
+  text-align: center;
 }
 
 .result-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
   margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateX(4px);
 }
 
 .result-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+.result-header span:first-child {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-header span:last-child {
+  font-variant-numeric: tabular-nums;
 }
 
 .progress-bar {
-  height: 10px;
+  height: 12px;
   background: #e5e7eb;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
 
 .progress-fill {
   height: 100%;
+  border-radius: 8px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.progress-fill.tmc { background: #16a34a; }
-.progress-fill.bjp { background: #ea580c; }
-.progress-fill.cpim { background: #dc2626; }
-.progress-fill.others { background: #64748b; }
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
 
-/* ===== FOOTER ===== */
-.app-footer {
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-fill.tmc { 
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+.progress-fill.bjp { 
+  background: linear-gradient(90deg, #ea580c, #fb923c);
+}
+.progress-fill.cpim { 
+  background: linear-gradient(90deg, #dc2626, #f87171);
+}
+.progress-fill.others { 
+  background: linear-gradient(90deg, #64748b, #94a3b8);
+}
+
+.total-votes {
   text-align: center;
-  padding: 12px;
-  font-size: 0.9rem;
-  color: #64748b;
-  background: #f8fafc;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #475569;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px solid #e2e8f0;
 }
 
-/* ===== DESKTOP ENHANCEMENTS ===== */
-@media (min-width: 768px) {
-  .card-content {
-    padding: 40px;
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile (small) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 12px;
   }
 
-  .header-title {
-    font-size: 1.8rem;
+  .card-header {
+    padding: 30px 20px;
+  }
+
+  .card-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .card-content {
+    padding: 24px 20px;
+  }
+
+  .button-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .vote-button {
+    padding: 16px 16px;
+    font-size: 0.95rem;
+  }
+
+  .results {
+    padding: 24px 20px;
+  }
+
+  .result-card {
+    padding: 16px;
+  }
+
+  .result-header {
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+  .button-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .button-grid {
+        /* single row of buttons on tablet */
+        grid-template-columns: repeat(4, minmax(140px, 1fr));
+        gap: 16px;
+      }
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+  .card-header h1 {
+    font-size: 2rem;
+  }
+
+  .button-grid {
+        /* single row of buttons on desktop */
+        grid-template-columns: repeat(4, minmax(140px, 1fr));
+      }
+}
+
+/* Large Desktop */
+@media (min-width: 1024px) {
+  .voting-card {
+    max-width: 900px;
+  }
+
+  .card-header {
+    padding: 50px 40px;
+  }
+
+  .card-content {
+    padding: 50px 40px;
+  }
+
+  .results {
+    padding: 40px 36px;
   }
 }

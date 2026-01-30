@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Vote, Mail, Lock } from 'lucide-react';
 import './App.css';
+import ArrowDown from './assets/arrow-down.png';
 
 const PARTIES = [
   { id: 'tmc', name: 'TMC' },
@@ -9,7 +10,7 @@ const PARTIES = [
   { id: 'others', name: 'Others' }
 ];
 
-const REACT_APP_API_BASE_URL = 'http://localhost:1988';
+const REACT_APP_API_BASE_URL = 'https://tex6qp534aw7jmp4voif5vejke0abusv.lambda-url.ap-south-1.on.aws';
 const POLL_ID = 'wb-2026';
 
 export default function VotingApp() {
@@ -19,6 +20,8 @@ export default function VotingApp() {
   const [error, setError] = useState('');
   const [votedParty, setVotedParty] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  console.log("Voted party:", votedParty);
 
   /* -------------------- Helper functions -------------------- */
   function getDeviceId() {
@@ -65,7 +68,7 @@ export default function VotingApp() {
         });
       } catch (e) {
         // 403 = already voted
-        setHasVoted(true);
+        // setHasVoted(true);
       } finally {
         fetchResults();
       }
@@ -122,8 +125,12 @@ export default function VotingApp() {
          <div className="card-header">
            <Vote size={36} />
            <h1>West Bengal Public Mandate – 2026</h1>
-           <p>One vote per person · Anonymous</p>
+           <p>One vote per person · Completely anonymous . Cast your vote below.</p>
+           <img src={ArrowDown} alt="" aria-hidden="true" className="down-icon" />
+            <span className="sr-only">down arrow</span>
          </div>
+
+         <div className="card-content">
  
          {/* ERROR */}
          {error && <p className="error-message">{error}</p>}
@@ -170,6 +177,7 @@ export default function VotingApp() {
  
            <p className="total-votes">Total votes: {totalVotes}</p>
          </div>
+       </div>
        </div>
      </div>
    );
