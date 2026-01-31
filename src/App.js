@@ -42,9 +42,15 @@ export default function VotingApp() {
 
   const api = async (url, options = {}) => {
     const fullUrl = `${REACT_APP_API_BASE_URL}${url}`
+    const voteToken = localStorage.getItem("vote_token");
+    const headers = {
+      "Content-Type": "application/json",
+      ...(voteToken && { "X-Vote-Token": voteToken })
+    };
+    
     const res = await fetch(fullUrl, {
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers,
       ...options
     });
 
