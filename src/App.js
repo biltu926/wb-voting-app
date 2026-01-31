@@ -47,7 +47,7 @@ export default function VotingApp() {
       "Content-Type": "application/json",
       ...(voteToken && { "X-Vote-Token": voteToken })
     };
-    
+
     const res = await fetch(fullUrl, {
       credentials: "include",
       headers,
@@ -87,7 +87,7 @@ export default function VotingApp() {
     try {
       const result = await api(`/api/poll/result?pollId=${POLL_ID}`);
       const mapped = {};
-      result.parties.forEach(p => (mapped[p.name] = p.votes));
+      result[0].parties.forEach(p => (mapped[p.name] = p.votes));
       setVotes(mapped);
     } catch (e) {
       setError("Failed to load poll results");
