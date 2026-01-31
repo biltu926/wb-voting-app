@@ -29,7 +29,7 @@ export default function VotingApp() {
     if (!id) {
       id = crypto.randomUUID();
       localStorage.setItem("device_id", id);
-      window.name = id;              // survives reloads
+      window.name = id;
       indexedDB.open("vote-db").onupgradeneeded = e => {
         e.target.result.createObjectStore("meta");
       };
@@ -55,6 +55,12 @@ export default function VotingApp() {
     });
 
     const data = await res.json();
+    
+    // Store vote token if returned
+    if (data.voteToken) {
+      localStorage.setItem("vote_token", data.voteToken);
+    }
+    
     if (!res.ok) throw new Error(data.message || "Request failed");
     return data;
   };
@@ -74,9 +80,12 @@ export default function VotingApp() {
         });
       } catch (e) {
         // 403 = already voted
-        // setHasVoted(true);
+        if (e.message.includes("already voted")) {
+          setHasVoted(true);
+          fetchResults(); // Only fetch results if already voted
+        }
       } finally {
-        fetchResults();
+        setLoading(false);
       }
     })();
   }, []);
@@ -91,8 +100,6 @@ export default function VotingApp() {
       setVotes(mapped);
     } catch (e) {
       setError("Failed to load poll results");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -110,7 +117,7 @@ export default function VotingApp() {
 
       setHasVoted(true);
       setVotedParty(partyId);
-      await fetchResults();
+      await fetchResults(); // Fetch results AFTER voting
     } catch (e) {
       setError(e.message);
     }
@@ -162,27 +169,29 @@ export default function VotingApp() {
            </div>
          )}
  
-         {/* RESULTS */}
-         <div className="results">
-           <h2>Current Results</h2>
- 
-           {PARTIES.map(p => (
-             <div key={p.id} className="result-card">
-               <div className="result-header">
-                 <span>{p.name}</span>
-                 <span>{votes[p.id] || 0} ({percent(votes[p.id] || 0)}%)</span>
+         {/* RESULTS - Only show after voting */}
+         {hasVoted && (
+           <div className="results">
+             <h2>Current Results</h2>
+   
+             {PARTIES.map(p => (
+               <div key={p.id} className="result-card">
+                 <div className="result-header">
+                   <span>{p.name}</span>
+                   <span>{votes[p.id] || 0} ({percent(votes[p.id] || 0)}%)</span>
+                 </div>
+                 <div className="progress-bar">
+                   <div
+                     className={`progress-fill ${p.id}`}
+                     style={{ width: `${percent(votes[p.id] || 0)}%` }}
+                   />
+                 </div>
                </div>
-               <div className="progress-bar">
-                 <div
-                   className={`progress-fill ${p.id}`}
-                   style={{ width: `${percent(votes[p.id] || 0)}%` }}
-                 />
-               </div>
-             </div>
-           ))}
- 
-           <p className="total-votes">Total votes: {totalVotes}</p>
-         </div>
+             ))}
+   
+             <p className="total-votes">Total votes: {totalVotes}</p>
+           </div>
+         )}
        </div>
        </div>
      </div>
