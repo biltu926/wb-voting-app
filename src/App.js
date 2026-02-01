@@ -164,7 +164,7 @@ export default function VotingApp() {
          ) : (
            <div className="voted-banner">
              <Lock size={24} />
-             <p>Thanks for taking part in this mandate.</p>
+             <p>Thanks for taking part in this mandate. You've voted for</p>
              {votedParty && <strong>{votedParty.toUpperCase()}</strong>}
            </div>
          )}
