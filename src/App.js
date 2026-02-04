@@ -139,6 +139,9 @@ export default function VotingApp() {
            <Vote size={36} />
            <h1>West Bengal Public Mandate – 2026</h1>
            <p>One vote per person · Completely anonymous . Cast your vote below.</p>
+           <div className="important-note" role="note" aria-live="polite">
+            <strong>Important:</strong> If you see Token not found error, please close the tab and try from another device.
+          </div>
            <img src={ArrowDown} alt="" aria-hidden="true" className="down-icon" />
             <span className="sr-only">down arrow</span>
          </div>
